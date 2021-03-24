@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+provider "azurerm" {
+  features {}
+}
+
 locals {
   storageAccounts = var.storage_accounts
 

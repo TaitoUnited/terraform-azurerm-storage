@@ -23,7 +23,8 @@ storageAccounts:
   - name: zone1-state
     purpose: state
     location: northeurope
-    accessTier: hot
+    accountTier: Standard
+    accessTier: Hot
     accountReplicationType: ZRS
     containerAccessType: private
     allowBlobPublicAccess: false
@@ -33,7 +34,8 @@ storageAccounts:
   - name: zone1-locked-backup
     purpose: backup
     location: northeurope
-    accessTier: cold
+    accountTier: Standard
+    accessTier: Cool
     accountReplicationType: GRS
     containerAccessType: private
     allowBlobPublicAccess: false
@@ -44,7 +46,8 @@ storageAccounts:
   - name: zone1-public
     purpose: public
     location: northeurope
-    accessTier: hot
+    accountTier: Standard
+    accessTier: Hot
     accountReplicationType: ZRS
     containerAccessType: blob
     allowBlobPublicAccess: true

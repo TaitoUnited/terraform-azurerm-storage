@@ -35,7 +35,7 @@ resource "azurerm_storage_account" "account" {
   }
 
   dynamic "network_rules" {
-    for_each = each.value.network_rules != null ? [ each.value.networkRules ] : []
+    for_each = each.value.networkRules != null ? [ each.value.networkRules ] : []
     content {
       default_action             = try(network_rules.value.defaultAction, "Deny")
       ip_rules                   = network_rules.value.ipRules

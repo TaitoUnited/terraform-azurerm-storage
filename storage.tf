@@ -77,7 +77,7 @@ resource "azurerm_storage_container" "container" {
 for_each                = {for item in local.storageAccounts: item.name => item}
 
   name                  = each.value.name
-  storage_account_name  = each.value.name
+  storage_account_name  = azurerm_storage_account.account[each.key].name
   container_access_type = try(each.value.containerAccessType, "private")
 
   lifecycle {

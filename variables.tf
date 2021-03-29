@@ -40,7 +40,8 @@ variable "storage_accounts" {
       virtualNetworkSubnetIds = list(string)
     }))
 
-    # TODO: cdnDomain = optional(string)
+    # TODO: cdnDomain
+    cdnDomain = optional(string)
 
     corsRules = optional(list(object({
       allowedOrigins = optional(list(string))

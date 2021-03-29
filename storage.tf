@@ -35,11 +35,11 @@ resource "azurerm_storage_account" "account" {
   }
 
   dynamic "network_rules" {
-    for_each = try(each.value.network_rules, null) != null ? each.value.networkRules : []
+    for_each = each.value.network_rules != null ? [ each.value.networkRules ] : []
     content {
-      default_action             = try(networkRules.value.defaultAction, "Deny")
-      ip_rules                   = networkRules.value.ipRules
-      virtual_network_subnet_ids = networkRules.value.virtualNetworkSubnetIds
+      default_action             = try(network_rules.value.defaultAction, "Deny")
+      ip_rules                   = network_rules.value.ipRules
+      virtual_network_subnet_ids = network_rules.value.virtualNetworkSubnetIds
     }
   }
 

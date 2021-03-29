@@ -21,48 +21,48 @@ variable "resource_group_name" {
 variable "storage_accounts" {
   type = list(object({
     name = string
-    purpose = string
+    purpose = optional(string)
     location = string
-    containerAccessType = string     # blob, container, private (for the underlying container)
+    containerAccessType = optional(string)     # blob, container, private (for the underlying container)
 
-    accountKind = string
-    accountTier = string             # Standard, Premium
-    accountReplicationType = string  # LRS, GRS, RAGRS, ZRS, GZRS, RAGZRS
-    accessTier = string              # Hot, Cool
-    enableHttpsTrafficOnly = bool
-    minTlsVersion = string           # TLS1_0, TLS1_1, TLS1_2
-    isHnsEnabled = bool
-    largeFileShareEnabled = bool
+    accountKind = optional(string)
+    accountTier = optional(string)             # Standard, Premium
+    accountReplicationType = optional(string)  # LRS, GRS, RAGRS, ZRS, GZRS, RAGZRS
+    accessTier = optional(string)              # Hot, Cool
+    enableHttpsTrafficOnly = optional(bool)
+    minTlsVersion = optional(string)           # TLS1_0, TLS1_1, TLS1_2
+    isHnsEnabled = optional(bool)
+    largeFileShareEnabled = optional(bool)
 
-    networkRules = object({
+    networkRules = optional(object({
       defaultAction = string
       ipRules = list(string)
       virtualNetworkSubnetIds = list(string)
-    })
-
-    # TODO: cdnDomain = string
-
-    corsRules = list(object({
-      allowedOrigins = list(string)
-      allowedMethods = list(string)
-      allowedHeaders = list(string)
-      exposedHeaders = list(string)
-      maxAgeInSeconds = number
     }))
 
-    # TODO: versioningEnabled = bool
-    # TODO: versioningRetainDays = number
-    # TODO: hotRetainDays = number
-    # TODO: backupRetainDays = number
-    autoDeletionRetainDays = number
+    # TODO: cdnDomain = optional(string)
 
-    allowBlobPublicAccess = bool
+    corsRules = optional(list(object({
+      allowedOrigins = optional(list(string))
+      allowedMethods = optional(list(string))
+      allowedHeaders = optional(list(string))
+      exposedHeaders = optional(list(string))
+      maxAgeInSeconds = optional(number)
+    })))
+
+    # TODO: versioningEnabled = optional(bool)
+    # TODO: versioningRetainDays = optional(number)
+    # TODO: hotRetainDays = optional(number)
+    # TODO: backupRetainDays = optional(number)
+    autoDeletionRetainDays = optional(number)
+
+    allowBlobPublicAccess = optional(bool)
 
     # TODO: members not implemented
-    members = list(object({
+    members = optional(list(object({
       id = string
       roles = list(string)
-    }))
+    })))
   }))
   default     = []
   description = "Resources as JSON (see README.md). You can read values from a YAML file with yamldecode()."

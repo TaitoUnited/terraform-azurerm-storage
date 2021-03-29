@@ -31,7 +31,7 @@ resource "azurerm_storage_account" "account" {
   large_file_share_enabled  = try(each.value.largeFileShareEnabled, false)
 
   tags = {
-    purpose   = each.value.purpose
+    purpose   = try(each.value.purpose, "undefined")
   }
 
   dynamic "network_rules" {

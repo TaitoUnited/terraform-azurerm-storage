@@ -43,22 +43,25 @@ resource "azurerm_storage_account" "account" {
     }
   }
 
-  blob_properties {
-    dynamic "cors_rule" {
-      for_each = try(each.value.corsRule, null) != null ? [ each.value.corsRule ] : []
-      content {
-        allowed_origins = [ cors_rule.value.allowedOrigins ]
-        allowed_methods = try(cors_rule.value.allowedMethods, ["GET","HEAD"])
-        allowed_headers = try(cors_rule.value.allowedHeaders, ["*"])
-        exposed_headers = try(cors_rule.value.exposedHeaders, ["*"])
-        max_age_in_seconds = try(cors_rule.value.maxAgeInSeconds, 5)
+  dynamic "blob_properties" {
+    for_each = try(each.value.corsRule, null) != null || try(each.value.autoDeletionRetainDays, null) != null ? [ 1 ] : []
+    content {
+      dynamic "cors_rule" {
+        for_each = try(each.value.corsRule, null) != null ? [ each.value.corsRule ] : []
+        content {
+          allowed_origins = [ cors_rule.value.allowedOrigins ]
+          allowed_methods = try(cors_rule.value.allowedMethods, ["GET","HEAD"])
+          allowed_headers = try(cors_rule.value.allowedHeaders, ["*"])
+          exposed_headers = try(cors_rule.value.exposedHeaders, ["*"])
+          max_age_in_seconds = try(cors_rule.value.maxAgeInSeconds, 5)
+        }
       }
-    }
 
-    dynamic "delete_retention_policy" {
-      for_each = try(each.value.autoDeletionRetainDays, null) != null ? [ each.value.autoDeletionRetainDays ] : []
-      content {
-        days = delete_retention_policy.value
+      dynamic "delete_retention_policy" {
+        for_each = try(each.value.autoDeletionRetainDays, null) != null ? [ each.value.autoDeletionRetainDays ] : []
+        content {
+          days = delete_retention_policy.value
+        }
       }
     }
   }

@@ -23,7 +23,7 @@ locals {
 
   cdnStorageAccounts = flatten([
     for account in local.storageAccounts:
-    coalesce(account.cdnDomain, "") != "" ? [ account ] : []
+    account.cdnDomain != null ? [ account ] : []
   ])
 
   storageAccountMembers = flatten([

@@ -48,7 +48,7 @@ variable "storage_accounts" {
       allowedMethods = optional(list(string))
       allowedHeaders = optional(list(string))
       exposedHeaders = optional(list(string))
-      maxAgeInSeconds = optional(number)
+      maxAgeSeconds = optional(number)
     })))
 
     # TODO: versioningEnabled = optional(bool)

@@ -54,8 +54,8 @@ storageAccounts:
     versioningEnabled: true        # TODO: implement
     versioningRetainDays: 60       # TODO: implement
     cdnDomain: cdn.mydomain.com    # TODO: implement
-    cors:
-      - origin: ["*"]
+    corsRules:
+      - allowedOrigins: ["*"]
     members:                       # TODO: implement
       - id: "cicd-serviceaccount"
         roles: [ "objectCreator" ]

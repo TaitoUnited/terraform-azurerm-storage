@@ -20,45 +20,45 @@ resource "azurerm_storage_account" "account" {
   name                      = replace(each.value.name, "-", "")
   resource_group_name       = var.resource_group_name
   location                  = each.value.location
-  account_kind              = try(each.value.accountKind, "StorageV2")
-  account_tier              = try(each.value.accountTier, "Standard")         # Standard, Premium
-  account_replication_type  = try(each.value.accountReplicationType, "ZRS")   # LRS, GRS, RAGRS, ZRS, GZRS, RAGZRS
-  access_tier               = try(each.value.accessTier, "Hot")               # Hot, Cool
-  enable_https_traffic_only = try(each.value.enableHttpsTrafficOnly, true)
-  min_tls_version           = try(each.value.minTlsVersion, "TLS1_0")         # TLS1_0, TLS1_1, TLS1_2
-  allow_blob_public_access  = try(each.value.allowBlobPublicAccess, false)
-  is_hns_enabled            = try(each.value.isHnsEnabled, true)
-  large_file_share_enabled  = try(each.value.largeFileShareEnabled, false)
+  account_kind              = coalesce(each.value.accountKind, "StorageV2")
+  account_tier              = coalesce(each.value.accountTier, "Standard")         # Standard, Premium
+  account_replication_type  = coalesce(each.value.accountReplicationType, "ZRS")   # LRS, GRS, RAGRS, ZRS, GZRS, RAGZRS
+  access_tier               = coalesce(each.value.accessTier, "Hot")               # Hot, Cool
+  enable_https_traffic_only = coalesce(each.value.enableHttpsTrafficOnly, true)
+  min_tls_version           = coalesce(each.value.minTlsVersion, "TLS1_0")         # TLS1_0, TLS1_1, TLS1_2
+  allow_blob_public_access  = coalesce(each.value.allowBlobPublicAccess, false)
+  is_hns_enabled            = coalesce(each.value.isHnsEnabled, true)
+  large_file_share_enabled  = coalesce(each.value.largeFileShareEnabled, false)
 
   tags = {
-    purpose   = try(each.value.purpose, "undefined")
+    purpose   = coalesce(each.value.purpose, "undefined")
   }
 
   dynamic "network_rules" {
     for_each = each.value.networkRules != null ? [ each.value.networkRules ] : []
     content {
-      default_action             = try(network_rules.value.defaultAction, "Deny")
+      default_action             = coalesce(network_rules.value.defaultAction, "Deny")
       ip_rules                   = network_rules.value.ipRules
       virtual_network_subnet_ids = network_rules.value.virtualNetworkSubnetIds
     }
   }
 
   dynamic "blob_properties" {
-    for_each = try(each.value.corsRule, null) != null || try(each.value.autoDeletionRetainDays, null) != null ? [ 1 ] : []
+    for_each = length(coalesce(each.value.corsRules, [])) > 0 || each.value.autoDeletionRetainDays != null ? [ 1 ] : []
     content {
       dynamic "cors_rule" {
-        for_each = try(each.value.corsRule, null) != null ? [ each.value.corsRule ] : []
+        for_each = coalesce(each.value.corsRules, [])
         content {
-          allowed_origins = [ cors_rule.value.allowedOrigins ]
-          allowed_methods = try(cors_rule.value.allowedMethods, ["GET","HEAD"])
-          allowed_headers = try(cors_rule.value.allowedHeaders, ["*"])
-          exposed_headers = try(cors_rule.value.exposedHeaders, ["*"])
-          max_age_in_seconds = try(cors_rule.value.maxAgeInSeconds, 5)
+          allowed_origins = cors_rule.value.allowedOrigins
+          allowed_methods = coalesce(cors_rule.value.allowedMethods, ["GET","HEAD"])
+          allowed_headers = coalesce(cors_rule.value.allowedHeaders, ["*"])
+          exposed_headers = coalesce(cors_rule.value.exposedHeaders, ["*"])
+          max_age_in_seconds = coalesce(cors_rule.value.maxAgeSeconds, 5)
         }
       }
 
       dynamic "delete_retention_policy" {
-        for_each = try(each.value.autoDeletionRetainDays, null) != null ? [ each.value.autoDeletionRetainDays ] : []
+        for_each = each.value.autoDeletionRetainDays != null ? [ each.value.autoDeletionRetainDays ] : []
         content {
           days = delete_retention_policy.value
         }
@@ -81,7 +81,7 @@ for_each                = {for item in local.storageAccounts: item.name => item}
 
   name                  = each.value.name
   storage_account_name  = azurerm_storage_account.account[each.key].name
-  container_access_type = try(each.value.containerAccessType, "private")
+  container_access_type = coalesce(each.value.containerAccessType, "private")
 
   lifecycle {
     prevent_destroy = true

@@ -23,13 +23,13 @@ locals {
 
   cdnStorageAccounts = flatten([
     for account in local.storageAccounts:
-    try(account.cdnDomain, "") != "" ? [ account ] : []
+    coalesce(account.cdnDomain, "") != "" ? [ account ] : []
   ])
 
   storageAccountMembers = flatten([
     for account in local.storageAccounts: [
       for member in (account.members != null ? account.members : []): [
-        for role in try(member.roles != null ? member.roles : []):
+        for role in coalesce(member.roles != null ? member.roles : []):
         {
           key    = "${account.name}-${member.id}-${role}"
           account = account.name

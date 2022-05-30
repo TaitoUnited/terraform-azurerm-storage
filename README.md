@@ -27,7 +27,7 @@ storageAccounts:
     accessTier: Hot
     accountReplicationType: ZRS
     containerAccessType: private
-    allowBlobPublicAccess: false
+    allowNestedItemsToBePublic: false
     versioningEnabled: true        # TODO: implement
     versioningRetainDays: 60       # TODO: implement
 
@@ -38,7 +38,7 @@ storageAccounts:
     accessTier: Cool
     accountReplicationType: GRS
     containerAccessType: private
-    allowBlobPublicAccess: false
+    allowNestedItemsToBePublic: false
     versioningEnabled: false
     lockRetainDays: 100            # TODO: implement
     autoDeletionRetainDays: 0      # TODO: implement
@@ -50,7 +50,7 @@ storageAccounts:
     accessTier: Hot
     accountReplicationType: ZRS
     containerAccessType: blob
-    allowBlobPublicAccess: true
+    allowNestedItemsToBePublic: true
     versioningEnabled: true        # TODO: implement
     versioningRetainDays: 60       # TODO: implement
     cdnDomain: cdn.mydomain.com    # TODO: implement

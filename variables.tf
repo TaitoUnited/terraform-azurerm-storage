@@ -57,7 +57,7 @@ variable "storage_accounts" {
     # TODO: backupRetainDays = optional(number)
     autoDeletionRetainDays = optional(number)
 
-    allowBlobPublicAccess = optional(bool)
+    allowNestedItemsToBePublic = optional(bool)
 
     # TODO: members not implemented
     members = optional(list(object({
